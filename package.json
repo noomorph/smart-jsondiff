@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "chai": "^1.8.1",
+    "commander": "^2.5.0",
     "es6-shim": "^0.20.2"
   },
   "devDependencies": {},
