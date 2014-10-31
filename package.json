@@ -1,0 +1,29 @@
+{
+  "name": "smart-jsondiff",
+  "version": "0.1.0",
+  "description": "Compares two JSON files and produces minimal difference in JSONPath format",
+  "main": "index.js",
+  "dependencies": {
+    "chai": "^1.8.1",
+    "es6-shim": "^0.20.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "mocha ./spec/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/noomorph/smart-jsondiff"
+  },
+  "keywords": [
+    "json",
+    "diff",
+    "jsonpath"
+  ],
+  "author": "Yaroslav Serhieiev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/noomorph/smart-jsondiff/issues"
+  },
+  "homepage": "https://github.com/noomorph/smart-jsondiff"
+}
