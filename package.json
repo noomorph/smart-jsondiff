@@ -1,7 +1,7 @@
 {
   "name": "smart-jsondiff",
-  "version": "0.1.0",
-  "description": "Compares two JSON files and produces minimal difference in JSONPath format",
+  "version": "0.3.0",
+  "description": "Compares two JSON files and produces the patch in JSONPath format",
   "main": "index.js",
   "dependencies": {
     "commander": "^2.5.0",
