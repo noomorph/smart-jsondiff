@@ -3,13 +3,13 @@ require('es6-shim');
 var path = require('path');
 var expect = require('chai').expect;
 
-var diff = require(path.join(__dirname, '..', './index.js'));
+var SJD = require(path.join(__dirname, '..', './index.js'));
 
 describe('JSON diff algorithm', function () {
   'use strict';
 
   var A, B;
-  var $S = JSON.stringify.bind(JSON);
+  var $S = SJD.defaults.formatValue;
 
   describe("simple comparer", function () {
 
@@ -19,32 +19,32 @@ describe('JSON diff algorithm', function () {
       });
 
       it('returns [] if A=B', function () {
-          expect(diff.compareJson(A, B)).to.eql([]);
+          expect(SJD.compareJson(A, B)).to.eql([]);
       });
 
       it('returns [-b] if A.b and !B.b', function () {
           delete B.b;
-          expect(diff.compareJson(A, B)).to.eql([["-", "b", $S(A.b), undefined]]);
+          expect(SJD.compareJson(A, B)).to.eql([["-", "b", $S(A.b), undefined]]);
       });
 
       it('returns [+b] if !A.b and B.b', function () {
           delete A.b;
-          expect(diff.compareJson(A, B)).to.eql([["+", "b", undefined, $S(B.b)]]);
+          expect(SJD.compareJson(A, B)).to.eql([["+", "b", undefined, $S(B.b)]]);
       });
 
       it('returns [+b] if !A.b and B.b', function () {
           delete A.b;
-          expect(diff.compareJson(A, B)).to.eql([["+", "b", undefined, $S(B.b)]]);
+          expect(SJD.compareJson(A, B)).to.eql([["+", "b", undefined, $S(B.b)]]);
       });
 
       it('returns [-x.a] if A.x.a and !B.x.a', function () {
           A.x.a = "";
-          expect(diff.compareJson(A, B)).to.eql([["-", "x.a", $S(A.x.a), undefined]]);
+          expect(SJD.compareJson(A, B)).to.eql([["-", "x.a", $S(A.x.a), undefined]]);
       });
 
       it('returns [+x.a] if !A.x.a and B.x.a', function () {
           B.x.a = "";
-          expect(diff.compareJson(A, B)).to.eql([["+", "x.a", undefined, $S(B.x.a)]]);
+          expect(SJD.compareJson(A, B)).to.eql([["+", "x.a", undefined, $S(B.x.a)]]);
       });
 
       it('returns [[*b.0, XXX, YYY], [*b.1, YYY, XXX]] if b[0] <-> b[1]', function () {
@@ -52,7 +52,7 @@ describe('JSON diff algorithm', function () {
           B.b[0] = B.b[1];
           B.b[1] = b0;
 
-          expect(diff.compareJson(A, B)).to.eql([
+          expect(SJD.compareJson(A, B)).to.eql([
               ["*", "b.0.y", $S(A.b[0].y), $S(B.b[0].y)],
               ["*", "b.1.y", $S(A.b[1].y), $S(B.b[1].y)]
           ]);
@@ -79,23 +79,15 @@ describe('JSON diff algorithm', function () {
           B = createJSON();
 
           config = {
-              getKeys: function (obj, state) {
-                  if (/\.set$/.test(state.path)) {
-                      return obj.map(function (o) {
-                          return o.id;
-                      });
+              getEntries: function (obj, state) {
+                  if (state.path === 'set') {
+                      return obj.reduce(function (map, o, index) {
+                          map[o.id] = index;
+                          return map;
+                      }, {});
                   }
 
-                  return diff.defaults.getKeys(obj, state);
-              },
-              getValue: function (obj, key, state) {
-                  if (state.path.match(/^set\.[^\.]+$/)) {
-                      return obj.find(function (o) {
-                          return o.id === key;
-                      });
-                  }
-
-                  return diff.defaults.getValue(obj, key, state);
+                  return this(obj, state);
               }
           };
       });
@@ -104,14 +96,25 @@ describe('JSON diff algorithm', function () {
           B.set[0] = A.set[1];
           B.set[1] = A.set[0];
 
-          expect(diff.compareJson(A, B, config)).to.eql([]);
+          expect(SJD.compareJson(A, B, config)).to.eql([]);
+      });
+
+      it("detects real changes in the set", function () {
+          var t = B.set[0];
+          B.set[0] = B.set[1];
+          B.set[1] = t;
+          t.data = "other";
+
+          expect(SJD.compareJson(A, B, config)).to.eql([
+              ['*', 'set.I.data', $S('first'), $S('other')]
+          ]);
       });
 
       it("does not ignore order of elements in list", function () {
           B.list[0] = A.list[1];
           B.list[1] = A.list[0];
 
-          expect(diff.compareJson(A, B, config)).to.eql([
+          expect(SJD.compareJson(A, B, config)).to.eql([
               ["*", "list.0", $S(10), $S(20)],
               ["*", "list.1", $S(20), $S(10)]
           ]);
