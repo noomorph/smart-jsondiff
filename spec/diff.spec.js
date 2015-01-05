@@ -110,6 +110,21 @@ describe('JSON diff algorithm', function () {
           ]);
       });
 
+      it("can detect index changes in the set as well", function () {
+          config.compareIndices = true;
+
+          var t = B.set[0];
+          B.set[0] = B.set[1];
+          B.set[1] = t;
+          t.data = "other";
+
+          expect(SJD.compareJson(A, B, config)).to.eql([
+              ['~', 'set.I', 0, 1],
+              ['*', 'set.I.data', $S('first'), $S('other')],
+              ['~', 'set.II', 1, 0]
+          ]);
+      });
+
       it("does not ignore order of elements in list", function () {
           B.list[0] = A.list[1];
           B.list[1] = A.list[0];

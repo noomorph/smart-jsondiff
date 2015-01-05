@@ -111,6 +111,16 @@ describe('JSON patch algorithm', function () {
             expect(B).to.not.eq(A);
         });
 
+        it('should ignore array order changes', function () {
+            B = SJD.patchJson(A, [
+                ["~", "b", 0, 1],
+                ["~", "b", 1, 0]
+            ]);
+
+            expect(B.b[0]).to.eql(A.b[0]);
+            expect(B.b[1]).to.eql(A.b[1]);
+        });
+
         it('should modify object A if doNotClone === true', function () {
             B = SJD.patchJson(A, [["-", "b"]], { doNotClone: true });
 
