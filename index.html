@@ -1,1 +1,36 @@
-My GitHub Page
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>smart-jsondiff :: Demo Page</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>smart-jsondiff :: demo</h1>
+    </header>
+
+    <div class="demo">
+        <input id="toggleA" type="checkbox" checked="checked" />
+        <div class="part">
+            <label for="toggleA">JSON A</label>
+            <textarea id="jsonA" tabindex="1" autofocus></textarea>
+        </div>
+
+        <input id="toggleB" type="checkbox" checked="checked" />
+        <div class="part">
+            <label for="toggleB">JSON B</label>
+            <textarea id="jsonB" tabindex="2"></textarea>
+        </div>
+
+        <input id="toggleD" type="checkbox" checked="checked" />
+        <div class="part">
+            <label for="toggleD">DIFF</label>
+            <textarea readonly="true" id="diff" tabindex="3"></textarea>
+        </div>
+    </div>
+
+<script src="js/smart-jsondiff.browserified.js"></script>
+<script src="js/textareas.js"></script>
+</body>
+</html>

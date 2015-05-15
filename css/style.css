@@ -1,0 +1,130 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+
+body, textarea, input {
+    font-size: 12px;
+    font-family: Monaco, Consolas, monospace;
+    background: rgb(27, 29, 30);
+    color: rgb(249, 249, 243);
+}
+
+footer, h1 {
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    text-align: center;
+    font-family: monospace;
+}
+
+.demo {
+    -webkit-box-align: stretch;
+    -webkit-align-items: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+            flex-wrap: wrap;
+    position: relative;
+}
+
+.part {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-shrink: 1;
+        -ms-flex-negative: 1;
+            flex-shrink: 1;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+        -ms-flex-positive: 0;
+            flex-grow: 0;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+        -ms-flex-direction: column;
+            flex-direction: column;
+}
+
+input:checked+.part {
+    -webkit-flex-shrink: 0;
+        -ms-flex-negative: 0;
+            flex-shrink: 0;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+}
+
+input:checked+.part textarea {
+    width: auto;
+}
+
+input:checked+.part label {
+    color: white;
+}
+
+textarea {
+    background: none;
+    border: none;
+    border-right: 1px solid gray;
+    border-top: 1px solid gray;
+    box-sizing: border-box;
+    display: block;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    width: 5em;
+    outline: none;
+    overflow-x: scroll;
+    padding: 0.5em 0.5em 0;
+    resize: none;
+    white-space: pre;
+    word-wrap: normal;
+}
+
+textarea:focus, .accepts-file {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.part:last-child textarea {
+    border-right: none;
+}
+
+input[type=checkbox] {
+    display: none;
+}
+
+label {
+    text-align: center;
+    color: gray;
+}
+
