@@ -71,6 +71,42 @@ describe('JSON diff algorithm', function () {
       }
   });
 
+  describe("cyclic comparer", function () {
+      beforeEach(function () {
+          A = createJSON();
+          A.x.b = A.b;
+          A.b.push(A.x);
+
+          B = createJSON();
+          B.x.b = B.b;
+          B.b.push(B.x);
+
+          SJD.compareJson(A, B, { doNotClone: true });
+      });
+
+      it('returns [-x.a] if A.x.a and !B.x.a', function () {
+          A.x.a = "";
+          expect(SJD.compareJson(A, B, { doNotClone: true })).to.eql([["-", "x.a", $S(A.x.a), undefined]]);
+      });
+
+      it('returns [+x.a] if !A.x.a and B.x.a', function () {
+          B.x.a = "";
+          expect(SJD.compareJson(A, B, { doNotClone: true })).to.eql([["+", "x.a", undefined, $S(B.x.a)]]);
+      });
+
+      function createJSON() {
+          return {
+              a: 5,
+              x: { },
+              b: [
+                  { y: 1 },
+                  { y: 2 },
+                  { y: 3 }
+              ]
+          };
+      }
+  });
+
   describe("custom comparer", function () {
       var config;
 
